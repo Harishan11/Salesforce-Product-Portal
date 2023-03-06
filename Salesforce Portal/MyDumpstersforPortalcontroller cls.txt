@@ -1,0 +1,384 @@
+public class MyDumpstersforPortalcontroller 
+{
+    
+    public List<Dumpsters__c> AustinDumpstersList {get; set;}
+    public List<Dumpsters__c> HoustonDumpstersList {get; set;}
+    public List<Dumpsters__c> SanAntonioDumpstersList {get; set;}
+    public String CustomerName {get; set;}
+    public string selectedStatus{get;set;}
+    public string JobNo{get;set;}
+    public string Address{get;set;}
+    
+    
+    public MyDumpstersforPortalcontroller()
+    {
+        AustinDumpstersList = new List<Dumpsters__c>();
+        HoustonDumpstersList = new List<Dumpsters__c>();
+        SanAntonioDumpstersList = new List<Dumpsters__c>();
+      
+        Id currentUserId = UserInfo.getUserId();  
+       system.debug('uid'+currentUserId);
+       List<Contact> cn	= [SELECT AccountId, Id,  Name, Account.Name FROM Contact where Owner.Id = :currentUserId];     
+       String Acc_name;         
+	   for (Contact contact : cn) {
+  		Acc_name = contact.Account.Name;          
+    	 }
+        
+        for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Dumpster_Weight__c,Austin_Checkbox_Helper__c, Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c FROM Dumpsters__c where AAccountccount__r.name= :Acc_name and (Status__c = 'Request for Pick-Up' or Status__c = 'Unscheduled' or Status__c = 'Scheduled' or Status__c = 'Drop Off Complete') order by Name, Delivery_Address__c DESC limit 100])
+        {                
+            // and (Confirmed_Pick_Up_Date__c =: system.today() or Status__c = 'Unscheduled' or Status__c = 'Scheduled') and (Drop_Off_Visit_Date__c =: system.today() or Status__c = 'Request for Pick-Up') and Full_At_The_Office__c != 'Yes' order by Delivery_Address__c    
+           
+           if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+           {
+               AustinDumpstersList.add(DumpsterFor );
+           }
+           
+           if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+           {
+               HoustonDumpstersList.add(DumpsterFor );
+           }
+           
+           if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+           {
+               SanAntonioDumpstersList.add(DumpsterFor );
+           }
+           
+           
+        }
+    }
+    
+  
+    
+    public void search()
+    {
+        system.debug('selectedStatus > '+selectedStatus);
+        system.debug('JobNo >'+JobNo);
+        system.debug('Address > '+Address);
+        AustinDumpstersList.clear();
+        HoustonDumpstersList.clear();
+        SanAntonioDumpstersList.clear();
+        System.debug(selectedStatus+'  First Check '+JobNo+'  Second check  '+Address);
+      
+        Id currentUserId = UserInfo.getUserId();  
+       system.debug('uid'+currentUserId);
+       List<Contact> cn	= [SELECT AccountId, Id,  Name, Account.Name FROM Contact where Owner.Id = :currentUserId];     
+       String Acc_name;         
+	   for (Contact contact : cn) {
+  		Acc_name = contact.Account.Name;          
+    	 }
+        if(selectedStatus!=null && JobNo!=null  && Address!=null)
+        {
+            system.debug('3in>>');
+            for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c, Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name  and Status__c =:selectedStatus and Purchase_Order__c =:JobNo and Pdf_Parser_Delivery_Address__c=:Address order by Name, Delivery_Address__c DESC limit 100])
+            {                
+                System.debug(' HOuston values '+DumpsterFor.Haulbrooke_Regional_Base__c+ ' Haulbrooke_Regional_Base__c '+DumpsterFor.Austin_Checkbox_Helper__c);
+                if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+                {
+                AustinDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+                {
+                HoustonDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+                {
+                SanAntonioDumpstersList.add(DumpsterFor );
+                }
+                
+            
+            }
+        }
+       
+        if(selectedStatus!=null && JobNo!=null && (Address==null || Address.contains('--Select--')))
+        {
+            
+            system.debug('1st2in>>');
+            for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c, Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name and Status__c =:selectedStatus and Purchase_Order__c =:JobNo  order by Name, Delivery_Address__c DESC limit 100])
+            {                
+                System.debug(' HOuston values '+DumpsterFor.Haulbrooke_Regional_Base__c+ ' Haulbrooke_Regional_Base__c '+DumpsterFor.Austin_Checkbox_Helper__c);
+                if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+                {
+                AustinDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+                {
+                HoustonDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+                {
+                SanAntonioDumpstersList.add(DumpsterFor );
+                }
+                
+            
+            }
+        }
+        System.debug(selectedStatus+'  First Check '+JobNo+'  Third if  '+Address);
+        if(selectedStatus!=null && (JobNo==null || JobNo.contains('--Select--'))&& Address!=null)
+        {
+            system.debug('1nd3-3in>>');
+            for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c, Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name and Status__c =:selectedStatus and Pdf_Parser_Delivery_Address__c=:Address order by Name, Delivery_Address__c DESC limit 100])
+            {                
+                System.debug(' HOuston values '+DumpsterFor.Haulbrooke_Regional_Base__c+ ' Haulbrooke_Regional_Base__c '+DumpsterFor.Austin_Checkbox_Helper__c);
+                if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+                {
+                AustinDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+                {
+                HoustonDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+                {
+                SanAntonioDumpstersList.add(DumpsterFor );
+                }
+            
+            }
+        }
+        System.debug(selectedStatus+'  First Check '+JobNo+'  Fourth if  '+Address);
+        if((selectedStatus==null || selectedStatus.contains('--Select--')) && JobNo!=null  && Address!=null )
+        {
+            system.debug('lst2in>>');
+            for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c, Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name  and Purchase_Order__c =:JobNo and Pdf_Parser_Delivery_Address__c=:Address order by Name, Delivery_Address__c DESC limit 100])
+            {    
+                              System.debug(' HOuston values '+DumpsterFor.Haulbrooke_Regional_Base__c+ ' Haulbrooke_Regional_Base__c '+DumpsterFor.Austin_Checkbox_Helper__c);
+                if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+                {
+                AustinDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+                {
+                HoustonDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+                {
+                SanAntonioDumpstersList.add(DumpsterFor );
+                }
+            }
+        }
+        System.debug(selectedStatus+'  First Check '+JobNo+'  fivth if  '+Address);
+        if(selectedStatus!=null && (JobNo==null || JobNo.contains('--Select--')) && (Address==null || Address.contains('--Select--')))
+        {
+            system.debug('1stin>>');
+            for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c, Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name and Status__c =:selectedStatus order by Drop_Off_Visit_Date__c DESC LIMIT 100])
+            {                
+                System.debug(' HOuston values '+DumpsterFor.Haulbrooke_Regional_Base__c+ ' Haulbrooke_Regional_Base__c '+DumpsterFor.Austin_Checkbox_Helper__c);
+                if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+                {
+                AustinDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+                {
+                HoustonDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+                {
+                SanAntonioDumpstersList.add(DumpsterFor );
+                }
+            
+            }
+        }
+        System.debug(selectedStatus+'  First Check '+JobNo+'  Sixth if  '+Address);
+        if((selectedStatus==null || selectedStatus.contains('--Select--')) && JobNo!=null && (Address==null || Address.contains('--Select--')))
+        {
+            system.debug('2ndin>>');
+            for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c,Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name and Purchase_Order__c =:JobNo order by Name, Delivery_Address__c DESC limit 100])
+            {                
+                 System.debug(' HOuston values '+DumpsterFor.Haulbrooke_Regional_Base__c+ ' Haulbrooke_Regional_Base__c '+DumpsterFor.Austin_Checkbox_Helper__c);
+                if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+                {
+                AustinDumpstersList.add(DumpsterFor);
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+                {
+                HoustonDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+                {
+                SanAntonioDumpstersList.add(DumpsterFor );
+                }
+            
+            }
+        }
+        System.debug(selectedStatus+'  First Check '+JobNo+'  Seventh if  '+Address);
+        if((selectedStatus==null || selectedStatus.contains('--Select--')) && (JobNo==null || JobNo.contains('--Select--')) && Address!=null )
+        {
+            system.debug('lstin>>');
+            for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c,Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name and Pdf_Parser_Delivery_Address__c=:Address order by Name, Delivery_Address__c DESC limit 100])
+            {   
+                
+              System.debug(' HOuston values '+DumpsterFor.Haulbrooke_Regional_Base__c+ ' Haulbrooke_Regional_Base__c '+DumpsterFor.Austin_Checkbox_Helper__c);
+            
+                if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+                {
+                AustinDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+                {
+                HoustonDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+                {
+                SanAntonioDumpstersList.add(DumpsterFor );
+                }
+            
+            }
+        }
+        System.debug(selectedStatus+'  First Check '+JobNo+'  Eight if  '+Address);
+        if((selectedStatus==null || selectedStatus.contains('--Select--')) && (JobNo==null || JobNo.contains('--Select--')) && (Address==null || Address.contains('--Select--')))
+        {
+            system.debug('nthgin>>');
+            for(Dumpsters__c DumpsterFor : [SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c,Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name and (Status__c = 'Request for Pick-Up' or Status__c = 'Unscheduled' or Status__c = 'Scheduled' or Status__c = 'Drop Off Complete') order by Name, Delivery_Address__c DESC limit 100])
+            {                
+                System.debug(' HOuston values '+DumpsterFor.Haulbrooke_Regional_Base__c+ ' Haulbrooke_Regional_Base__c '+DumpsterFor.Austin_Checkbox_Helper__c);
+
+                if(DumpsterFor.Austin_Checkbox_Helper__c==true)
+                {
+                AustinDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='Houston')
+                {
+                HoustonDumpstersList.add(DumpsterFor );
+                }
+                
+                if(DumpsterFor.Haulbrooke_Regional_Base__c =='San Antonio' && DumpsterFor.Austin_Checkbox_Helper__c==false)
+                {
+                SanAntonioDumpstersList.add(DumpsterFor );
+                }
+            
+            }
+        }
+        
+        
+        
+    }
+    
+ 
+    
+    public List<SelectOption> getStatus() 
+    {
+    
+    List<SelectOption> options = new List<SelectOption>();
+    
+    options.add(new SelectOption('--Select--','--Select--'));
+   
+    Schema.DescribeFieldResult fieldResult = Dumpsters__c.Status__c.getDescribe();
+    List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
+    for( Schema.PicklistEntry pickListVal : ple)
+    {
+        options.add(new SelectOption(pickListVal.getValue(),pickListVal.getLabel()));
+    }     
+    
+    return options;    
+    }
+    
+    public List<SelectOption> getItems()
+    {
+    
+        List<SelectOption> options = new List<SelectOption>();
+        set<String> purlist = new set<string>();
+        
+        options.add(new SelectOption('--Select--','--Select--'));
+        
+         Id currentUserId = UserInfo.getUserId();  
+       system.debug('uid'+currentUserId);
+       List<Contact> cn	= [SELECT AccountId, Id,  Name, Account.Name FROM Contact where Owner.Id = :currentUserId];     
+       String Acc_name;         
+	   for (Contact contact : cn) {
+  		Acc_name = contact.Account.Name;          
+    	 }
+        for(Dumpsters__c Dumps:[SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c,Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name=  :Acc_name and (Status__c = 'Request for Pick-Up' or Status__c = 'Unscheduled' or Status__c = 'Scheduled' or Status__c = 'Drop Off Complete') order by Name DESC limit 100])
+        {
+         if(Dumps.Purchase_Order__c!=Null)
+         {
+             purlist.add(Dumps.Purchase_Order__c);
+         }
+         
+        }
+        
+        for(String str : Purlist)
+        {
+          options.add(new SelectOption(str,str));
+        }
+        
+        return options;
+    
+    }
+    
+    public List<SelectOption> getAddresses()
+    {
+    
+       List<SelectOption> options = new List<SelectOption>();
+       set<string> adress = new set<string>();
+       options.add(new SelectOption('--Select--','--Select--'));
+       Id currentUserId = UserInfo.getUserId();  
+       system.debug('uid'+currentUserId);
+       List<Contact> cn	= [SELECT AccountId, Id,  Name, Account.Name FROM Contact where Owner.Id = :currentUserId];     
+       String Acc_name;         
+	   for (Contact contact : cn) {
+  		Acc_name = contact.Account.Name;          
+    	 }
+        
+        for(Dumpsters__c Dumps:[SELECT Id, Name, AAccountccount__c,Austin_Checkbox_Helper__c,Dumpster_Weight__c,Pdf_Parser_Delivery_Address__c,Container_Asset__r.Name, AAccountccount__r.Name, Action__c, Delivery_Address__c, Status__c, Haulbrooke_Regional_Base__c ,Purchase_Order__c, Track_Link__c, Confirmed_Pick_Up_Date__c, Drop_Off_Visit_Date__c
+                 FROM Dumpsters__c where AAccountccount__r.name= :Acc_name and (Status__c = 'Request for Pick-Up' or Status__c = 'Unscheduled' or Status__c = 'Scheduled' or Status__c = 'Drop Off Complete') order by Name DESC limit 100 ])
+        {
+            //options.add(new SelectOption(Dumps.Pdf_Parser_Delivery_Address__c,Dumps.Pdf_Parser_Delivery_Address__c));
+            adress.add(Dumps.Pdf_Parser_Delivery_Address__c);
+        
+        }
+        
+        for(string str : adress)
+        {
+            options.add(new SelectOption(str,str));
+        }
+        
+        return options;
+    
+    }
+    
+   
+    @AuraEnabled
+    public static List<Dumpsters__c> getDumpstersList_Houston() 
+    {
+        List<Dumpsters__c> dumplist = [Select Id, Name, AAccountccount__r.Name, Status__c, Container_Asset__r.Name , Purchase_Order__c,Track_Link__c,Action__c,Pdf_Parser_Delivery_Address__c From Dumpsters__c where Haulbrooke_Regional_Base__c = 'Houston' order by Name DESC limit 1000];
+        return dumplist;
+    }
+    
+    @AuraEnabled
+    public static List<Dumpsters__c> getDumpstersList_austin() 
+    {
+        List<Dumpsters__c> dumplist = [Select Id, Name, AAccountccount__r.Name, Status__c, Container_Asset__r.Name , Purchase_Order__c,Track_Link__c,Action__c,Pdf_Parser_Delivery_Address__c,Austin_Checkbox_Helper__c  From Dumpsters__c where Austin_Checkbox_Helper__c = TRUE order by Name DESC limit 1000];
+        return dumplist;
+    }
+    
+    @AuraEnabled
+    public static List<Dumpsters__c> getDumpstersList_san() 
+    {
+        List<Dumpsters__c> dumplist = [Select Id, Name, AAccountccount__r.Name, Status__c, Container_Asset__r.Name , Purchase_Order__c,Track_Link__c,Action__c,Pdf_Parser_Delivery_Address__c From Dumpsters__c where Haulbrooke_Regional_Base__c = 'San Antonio' order by Name DESC limit 1000];
+        return dumplist;
+    }
+    
+}

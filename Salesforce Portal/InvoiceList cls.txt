@@ -1,0 +1,18 @@
+public with sharing class InvoiceList {
+    
+  public List<Dumpster_Invoice__c> dumpsters { get; set; } 
+    
+  public InvoiceList() {        
+       Id currentUserId = UserInfo.getUserId();  
+       system.debug('uid'+currentUserId);
+       List<Contact> cn	= [SELECT AccountId, Id,  Name, Account.Name FROM Contact where Owner.Id = :currentUserId];     
+       String Acc_name;         
+	   for (Contact contact : cn) {
+  		Acc_name = contact.Account.Name;          
+    	 }
+       dumpsters = [SELECT Name, Dumpsters__r.Name, Invoice_Date__c, Consolidate_Invoice_Sub_Total_Consolidat__c  FROM Dumpster_Invoice__c where Account__r.Name = :Acc_name];
+       system.debug('account'+Acc_name);
+       system.debug('usertest'+cn);      
+       system.debug('dumps'+dumpsters);
+  }
+}

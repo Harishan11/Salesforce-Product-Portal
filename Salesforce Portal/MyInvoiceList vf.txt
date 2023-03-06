@@ -1,0 +1,55 @@
+<apex:page controller="InvoiceList" docType="html-5.0"  sidebar="false" showHeader="false" standardStylesheets="true">   
+    <apex:form >
+        <apex:slds />  
+        
+        <div>
+            <apex:includescript value="//code.jquery.com/jquery-1.11.1.min.js"/>
+            <apex:includescript value="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"/>
+            <apex:stylesheet value="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css"/>
+            
+            <script>
+            j$ = jQuery.noConflict();
+            j$(document).ready( function () {
+                var accTable = j$('[id$="accTable"]').DataTable({
+                    
+                });
+            });
+            </script>
+            
+            <br/><br/>
+            <div styleClass="center">            
+            </div>
+            <apex:outputPanel rendered="{!$User.Id == '005780000010JgfAAE'}">
+                <p style="text-align:left;font-style:Arial;margin-left:80px;font-size:20px;"><b>THE DEMO COMPANY</b></p>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!$User.Id == '0057800000106zUAAQ'}">
+                <p style="text-align:left;font-style:Arial;margin-left:70px;font-size:20px;"><b>NEW PRECISION DEMOLITION DUMPSTER DELIVERY</b></p>
+            </apex:outputPanel>
+            <br/>
+            <table id="accTable" class="display"  width="100%">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;font-style:Arial">Invoice No</th>
+                        <th style="text-align:center;font-style:Arial">Dumpsters</th>
+                        <th style="text-align:center;font-style:Arial">Invoice Date</th>
+                        <th style="text-align:center;font-style:Arial">Consolidate Invoice Sub Total</th> 
+                    </tr>	
+                </thead>
+                <tbody>
+                    
+                    <apex:repeat value="{!dumpsters}" var="dump">
+                        <tr> 
+                            <td style="text-align:center;font-style:Arial">{!dump.Name}</td>
+                            <td style="text-align:center;font-style:Arial">{!dump.Dumpsters__r.Name}</td>
+                            <td style="text-align:center;">{!dump.Invoice_Date__c}</td>
+                            <td style="text-align:center;font-style:Arial">{!dump.Consolidate_Invoice_Sub_Total_Consolidat__c}</td> 
+                            
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </div>        
+        
+    </apex:form>
+    <br/><br/>
+</apex:page>

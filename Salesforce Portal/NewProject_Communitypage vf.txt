@@ -1,0 +1,243 @@
+<apex:page sidebar="true" showHeader="true" controller="NewProjectCommunityController" docType="html-5.0">
+    
+    <script>
+    var close = document.getElementsByClassName("closebtn");
+    var i;
+    
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function() {
+            var div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function() {
+                div.style.display = "none";
+            }, 1000);
+        }
+    }
+    
+    setTimeout(function() {
+        document.getElementById("alertS").style.visibility = "hidden";
+    }, 10000);
+    
+    setTimeout(function() {
+        document.getElementById("alertAccepted").style.visibility = "hidden";
+        ShowAllOrderToController(); 
+    }, 5000);
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0" />
+    <apex:form id="FormId">
+        <apex:slds />
+        <table border="0" width="{!if($User.UITheme == 'Theme4t','100%','100%')}" cellspacing="0">
+            <tr>
+                <td width="23%" style="background-color:#F58D17;border-right:0px;border-left:0px;">
+                    <img src="{!$Resource.Track_Logo}" width="{!if($User.UITheme == 'Theme4t','100%','60%')}" align="left" />
+                </td>
+               <td width="54%" style="  background-color:#F58D17; vertical-align:middle">
+  <apex:outputPanel rendered="{!$User.Id =='00546000001KYxDAAW'}">
+    <b style = 'font-size:30px;'><center>New Precision Demolition Dumpster Delivery</center></b>
+  </apex:outputPanel>
+  <apex:outputPanel rendered="{!$User.Id =='005780000010JgfAAE'}">
+    <b style = 'font-size:30px;'><center>The Demo company</center></b>
+  </apex:outputPanel>
+</td>
+                <td width="23%" style="background-color:#F58D17;border-right:0px;border-left:0px;">
+                    <img src="{!$Resource.Track_Logo}" width="{!if($User.UITheme == 'Theme4t','100%','60%')}" align="right" />
+                </td>
+            </tr>
+        </table>
+        
+        <div>
+            <br/>
+            <br/>
+            
+            <body class="slds-scope" align="center">
+                
+                <apex:outputPanel style="font-family:Calibri(Body);" rendered="{!NotforPickup}" id="NotInPickUp">
+                    <center>
+                        <div id="NotInPickUpDiv" class="alert success" style="color: green;">
+                            <span class="closebtn"></span>
+                            <strong style="{!if($User.UITheme == 'Theme4t','font-size:18px;','font-size:20px;')}">New Delivery Created Successfully – Thank you for your business!</strong>
+                        </div>
+                        
+                    </center>
+                </apex:outputPanel>
+                <br/>
+                <apex:pageMessages ></apex:pageMessages>
+                
+                
+                <apex:actionStatus id="pageStatus">
+                    <apex:facet name="start">
+                        <div id="spinner" class="slds-spinner_container slds-is-relative">
+                            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </apex:facet>
+                </apex:actionStatus>
+                <table>
+                    <tr align="center" >
+                        <td width="5%" />
+                        
+                        <td style="{!IF($User.UITheme != 'Theme4t','','display:none')}" width="30%">
+                        </td>
+                        <td width="{!IF($User.UITheme != 'Theme4t','10%','40%')}">
+                            <span class="slds-form-element__label" style="color: black">Account</span>
+                        </td>
+                       <td width="20%">
+                            <apex:outputText style="width:100%" value="{!$Label.Account_Precision_Demolition}"/>
+                        </td>
+                        <td width="38%">
+                        </td>
+                    </tr>
+                    <tr >
+                        <td>
+                            <br/>
+                        </td>
+                    </tr>
+                    
+                    <tr align="center" >
+                        <td width="5%" />
+                        <td style="{!IF($User.UITheme != 'Theme4t','','display:none')}" width="32%">
+                        </td>
+                        <td width="{!IF($User.UITheme != 'Theme4t','10%','40%')}">
+                            <span class="slds-form-element__label" style="color: black">Dumpster Size</span>
+                        </td>
+                        <td width="20%">
+                            <apex:selectList styleClass="slds-select" Size="1" value="{!DumpsterSizeValue}" label="Dumpster Size" required="true">
+                                <apex:selectOptions value="{!DumpsterSize}"></apex:selectOptions>
+                            </apex:selectList>
+                        </td>
+                        <td width="35%">
+                        </td>
+                    </tr>
+                    
+                    <tr >
+                        <td>
+                            <br/>
+                        </td>
+                    </tr>
+                    
+                    
+                    <tr align="center" >
+                        <td width="5%" />
+                        <td style="{!IF($User.UITheme != 'Theme4t','','display:none')}" width="32%">
+                        </td>
+                        <td width="{!IF($User.UITheme != 'Theme4t','10%','40%')}">
+                            <span class="slds-form-element__label" style="color: black">Delivery Date</span>
+                        </td>
+                        <td width="20%">
+                            <apex:inputField styleclass="slds-input" value="{!NewDumpsterRecord.Drop_Off_Visit_Date__c}" required="true"/>
+                        </td>
+                        <td width="38%">
+                        </td>
+                    </tr>
+                    
+                    <tr >
+                        <td>
+                            <br/>
+                        </td>
+                    </tr>
+                    
+                    <tr align="center" >
+                        <td width="5%" />
+                        <td style="{!IF($User.UITheme != 'Theme4t','','display:none')}" width="32%">
+                        </td>
+                        <td width="{!IF($User.UITheme != 'Theme4t','10%','40%')}">
+                            <span class="slds-form-element__label" style="color: black">Delivery Comments</span>
+                        </td>
+                        <td width="20%">
+                            <apex:inputTextarea value="{!DeliveryInstruction}" styleclass="slds-input"/>
+                        </td>
+                        <td width="38%">
+                        </td>
+                    </tr>
+                    <tr >
+                        <td>
+                            <br/>
+                        </td>
+                    </tr>
+                    <tr align="center" >
+                        <td width="5%" />
+                        <td style="{!IF($User.UITheme != 'Theme4t','','display:none')}" width="32%">
+                        </td>
+                        <td width="{!IF($User.UITheme != 'Theme4t','10%','40%')}" >
+                            <span class="slds-form-element__label" style="color: black">Phone Number</span>
+                        </td>
+                        <td width="20%">
+                            <apex:inputfield html-min="0"  type="tel" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{!NewDumpsterRecord.Phone_Number_2__c}" styleclass="slds-input"/>
+                        </td>
+                        <td width="38%">
+                        </td>
+                    </tr>
+                    <tr >
+                        <td>
+                            <br/>
+                        </td>
+                    </tr>
+                    <tr align="center" >
+                        <td width="5%" />
+                        <td style="{!IF($User.UITheme != 'Theme4t','','display:none')}" width="32%">
+                        </td>
+                        <td width="{!IF($User.UITheme != 'Theme4t','10%','40%')}">
+                            <span class="slds-form-element__label" style="color: black">Purchase Order</span>
+                        </td>
+                        <td width="20%">
+                            <apex:inputfield value="{!NewDumpsterRecord.Purchase_Order__c}" styleclass="slds-input" required="false"/>
+                        </td>
+                        <td width="38%">
+                        </td>
+                    </tr>
+                    <tr >
+                        <td>
+                            <br/>
+                        </td>
+                    </tr>
+                    
+                    <tr align="center" >
+                        <td width="5%" />
+                        
+                        <td style="{!IF($User.UITheme != 'Theme4t','','display:none')}" width="30%">
+                        </td>
+                        <td width="{!IF($User.UITheme != 'Theme4t','10%','40%')}">
+                            <span class="slds-form-element__label" style="color: black">Address</span>
+                        </td>
+                        <td width="20%">
+                            <apex:inputField styleclass="slds-input" value="{!NewDumpsterRecord.Pdf_Parser_Delivery_Address__c}" required="true"/>
+                        </td>
+                        <td width="38%">
+                        </td>
+                    </tr>
+                    <tr >
+                        <td>
+                            <br/>
+                        </td>
+                    </tr>
+                    
+                    <tr align="center" >
+                        <td width="5%" />
+                        <td style="{!IF($User.UITheme != 'Theme4t','','display:none')}" width="32%">
+                        </td>
+                        <td width="{!IF($User.UITheme != 'Theme4t','10%','40%')}">
+                            
+                        </td>
+                        <td width="20%">
+                            <div class="slds-button-group slds-m-top--small" role="group">
+                                <apex:commandButton action="{!SaveDumpster}" value="Save" style="left:0px;position:relative;" styleClass="slds-button slds-button--neutral slds-grow" status="pageStatus" reRender="FormId" /> 
+                                <apex:commandButton action="{!Cancel}" value="Cancel" style="left:10px;position:relative;" styleClass="slds-button slds-button--neutral slds-grow" reRender="FormId"/>
+                            </div>
+                        </td>
+                        <td width="38%">
+                        </td>
+                    </tr>
+                    <tr >
+                        <td>
+                            <br/>
+                        </td>
+                    </tr>
+                </table>
+                
+            </body>
+        </div>
+    </apex:form>
+    
+</apex:page>

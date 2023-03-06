@@ -1,0 +1,228 @@
+<apex:page controller="MyDumpstersforPortalcontroller" docType="HTML-5.0"  sidebar="false" showHeader="false">
+    <apex:form >
+    <apex:slds />
+    
+    <table border="0" width="{!if($User.UITheme == 'Theme4t','100%','100%')}" cellspacing="0">
+        <tr>
+            <td width="23%" style="background-color:#F58D17;border-right:0px;border-left:0px;">
+                <img src="{!$Resource.Track_Logo}" width="{!if($User.UITheme == 'Theme4t','100%','60%')}" align="left" />
+            </td>
+            <td width="54%" style="padding-top:4px;background-color:#F58D17">
+                <b style="{!if($User.UITheme == 'Theme4t','font-size:20px;','font-size:25px;')}"><center>Haulbrooke {!CustomerName} Trips</center></b>
+            </td>
+            <td width="23%" style="background-color:#F58D17;border-right:0px;border-left:0px;">
+                <img src="{!$Resource.Track_Logo}" width="{!if($User.UITheme == 'Theme4t','100%','60%')}" align="right" />
+            </td>
+        </tr>
+    </table>
+    
+    <br/><br/>
+    
+    
+    
+    <div>
+        <br/><br/>
+        
+        <body class="slds-scope" align="center">
+            
+            <div>
+            <apex:outputPanel >
+            
+            <table cellspacing="0">
+            <tr width="100%" align="Right">
+           
+            <!--
+            <td>
+            <b><h5> JOB NO </h5></b>
+            <apex:input type="text" value="{!JobNo}"/>
+            </td>
+            -->
+            <td width="8%"></td>            
+            <td>
+            <b><h5> PO No: </h5></b>
+            <apex:selectList required="true" multiselect="false" size="1" label="Type"  value="{!JobNo}" >
+            <apex:selectOptions value="{!Items}"/>
+            </apex:selectList>
+            </td>
+            
+            <!--
+            <td>
+            <b><h5> Address </h5></b>
+            <apex:input type="text" value="{!Address}"/>
+            </td>
+            
+            -->
+            <td width="2%"></td>
+             <td>
+            <b><h5> Status </h5></b>
+            <apex:selectList required="true" multiselect="false" size="1" label="Type"  value="{!selectedStatus}" >
+            <apex:selectOptions value="{!Status}"/>
+            </apex:selectList>
+            </td>
+            
+            
+            <td width="2%"></td>
+            <td>
+            <b><h5> Address </h5></b>
+            <apex:selectList required="true" multiselect="false" size="1" label="Type"  value="{!Address}" >
+            <apex:selectOptions value="{!Addresses}"/>
+            </apex:selectList>
+            </td>
+            
+           
+           
+            
+            <td>
+            <apex:commandButton styleClass="slds-button slds-button--neutral" action="{!search}" value="Search" />
+            </td>
+            <td width="7%"></td> 
+            </tr>
+            </table>
+            </apex:outputPanel>
+            
+            </div>
+            <br/>
+            
+            <div>
+            <h3><b>Austin Region</b></h3>
+            <br/>
+            <apex:outputPanel layout="block" style="overflow:auto;width:100%">
+            
+            <table>
+                <tr align="center" >
+                    <td width="7%" />
+                    <td width="{!IF($User.UITheme != 'Theme4t','70%','70%')}">
+                        <table border="1" style="border-collapse: collapse;">
+                            <tr bgcolor="#C6DDDC">
+                                <th>Record Id</th>
+                                <th>Dumpster Address &#9650;</th>
+                                <th>Dumpster Weight</th>
+                                <th>Drop Off / Visit Date</th>
+                                <th>Confirmed Pick-Up Date</th>
+                                <th>Purchase Order</th>
+                                <th>Status</th>
+                                <th>Dumpster ID</th>
+                                <th>Track Link</th>
+                                <th>Action</th>
+                            </tr>
+                            <apex:repeat value="{!AustinDumpstersList}" var="Dumpster">
+                                <tr>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Name}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Delivery_Address__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Dumpster_Weight__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Drop_Off_Visit_Date__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Confirmed_Pick_Up_Date__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Purchase_Order__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Status__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Container_Asset__r.Name}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Track_Link__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Action__c}" />&nbsp;</td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </td>
+                    <td width="7%">
+                    </td>
+                </tr>
+            </table>
+            </apex:outputPanel>
+            </div>
+           
+            <br/> 
+            <div>
+            <h3><b>Houston Region</b></h3>
+            <br/>
+            <apex:outputPanel layout="block" style="overflow:auto;width:100%">
+            
+            <table>
+                <tr align="center" >
+                    <td width="7%" />
+                    <td width="{!IF($User.UITheme != 'Theme4t','70%','70%')}">
+                        <table border="1" style="border-collapse: collapse;">
+                            <tr bgcolor="#C6DDDC">
+                                <th>Record Id</th>
+                                <th>Dumpster Address &#9650;</th>
+                                <th>Dumpster Weight</th>
+                                <th>Drop Off / Visit Date</th>
+                                <th>Confirmed Pick-Up Date</th>
+                                <th>Purchase Order</th>
+                                <th>Status</th>
+                                <th>Dumpster ID</th>
+                                <th>Track Link</th>
+                                <th>Action</th>
+                            </tr>
+                            <apex:repeat value="{!HoustonDumpstersList}" var="Dumpster">
+                                <tr>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Name}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Delivery_Address__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Dumpster_Weight__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Drop_Off_Visit_Date__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Confirmed_Pick_Up_Date__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Purchase_Order__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Status__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Container_Asset__r.Name}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Track_Link__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Action__c}" />&nbsp;</td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </td>
+                    <td width="7%">
+                    </td>
+                </tr>
+            </table>
+            </apex:outputPanel>
+            </div>
+            
+            <br/>
+            <div>
+            <h3><b>San Antonio Region</b></h3>
+            <br/>
+            
+            <apex:outputPanel layout="block" style="overflow:auto;width:100%">
+            
+            <table>
+                <tr align="center" >
+                    <td width="7%" />
+                    <td width="{!IF($User.UITheme != 'Theme4t','70%','70%')}">
+                        <table border="1" style="border-collapse: collapse;">
+                            <tr bgcolor="#C6DDDC">
+                                <th>Record Id</th>
+                                <th>Dumpster Address &#9650;</th>
+                                <th>Dumpster Weight</th>
+                                <th>Drop Off / Visit Date</th>
+                                <th>Confirmed Pick-Up Date</th>
+                                <th>Purchase Order</th>
+                                <th>Status</th>
+                                <th>Dumpster ID</th>
+                                <th>Track Link</th>
+                                <th>Action</th>
+                            </tr>
+                            <apex:repeat value="{!SanAntonioDumpstersList}" var="Dumpster">
+                                <tr>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Name}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Delivery_Address__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Dumpster_Weight__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Drop_Off_Visit_Date__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Confirmed_Pick_Up_Date__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Purchase_Order__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Status__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Container_Asset__r.Name}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Track_Link__c}" />&nbsp;</td>
+                                    <td>&nbsp;<apex:outputfield value="{!Dumpster.Action__c}" />&nbsp;</td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </td>
+                    <td width="7%">
+                    </td>
+                </tr>
+            </table>
+            <br/><br/>
+            </apex:outputPanel>
+            </div>
+        </body>
+        
+    </div>
+    </apex:form>
+</apex:page>
